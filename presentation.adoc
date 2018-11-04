@@ -1,3 +1,65 @@
 = Présentation Ansible
 
+== Généralités
+
+Site Web : https://docs.ansible.com
+
+Ansible : outil de gestion de configuration
+
+Liste des outils de gestion de configuration :
+
+* Chef (procédural)
+* Puppet (déclaratif)
+* Ansible (déclaratif)
+
+Ansible est déclaratif, cela veut dire que vous décrivez l'état dans lequel vous voulez que la machine soit à la fin, pas comment parvenir à l'état (ce qui serait du procédural)
+
+Vous allez écrire une suite de tâches qui vont décrire l'état final de la machine
+
+== Structure d'un projet Ansible
+
+```
+inventories/
+roles/
+vars/
+deploy.yml
+```
+
+* inventories : c'est là que vous décrivez les machines et les groupes de machines que vous voulez configurer
+* roles : c'est là que vous mettez les différentes configurations que vous voulez déployer sur les machines
+* vars : c'est là que l'on stocke les variables des configurations
+
+=== Inventories
+
+```yaml
+[servers]
+127.0.0.1
+
+```
+
+=== deploy.yml
+
+```yaml
+---
+- hosts: servers
+  become: yes
+  become_user: root
+  become_method: su
+  vars_files:
+    - "vars/common.yml"
+  roles:
+    - role: commons
+      tags: 
+        - commons
+    - role: users
+      tags:
+        - users
+```
+
+== Rôles
+
+== La Syntaxe YAML
+
+== Bonnes Pratiques
+
 

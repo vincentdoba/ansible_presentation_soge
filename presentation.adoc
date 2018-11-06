@@ -21,13 +21,13 @@ Vous allez écrire une suite de tâches qui vont décrire l'état final de la ma
 ```
 inventories/
 roles/
-vars/
+group_vars/
 deploy.yml
 ```
 
 * inventories : c'est là que vous décrivez les machines et les groupes de machines que vous voulez configurer
 * roles : c'est là que vous mettez les différentes configurations que vous voulez déployer sur les machines
-* vars : c'est là que l'on stocke les variables des configurations
+* group_vars : c'est là que l'on stocke les variables des configurations
 
 === Inventories
 
@@ -100,8 +100,129 @@ Pour plus de détails, https://docs.ansible.com/ansible/latest/reference_appendi
 
 == Rôles
 
+Un role est une unité de configuration, par exemple `nginx`, `java`, etc...
 
+=== Structure d'un rôle
+
+```
+ role_name/
+  tasks/
+  handlers/
+  files/
+  templates/
+  vars/
+  defaults/
+  meta/
+```
+
+dans chaque répertoire, vous mettez un fichier `main.yml`
+
+==== Tasks
+
+Dans le dossier `tasks`, vous allez définir les taches à exécuter. Vous pouvez les mettre dans plusieurs fichiers pour bien découper les tâches. Dans ce cas le fichier `main.yml` pourrait ressembler à ceci :
+
+```yaml
+---
+- include first_file.yml
+- include second_file.yml
+```
+
+Exemple d'une tâche :
+
+```yaml
+---
+- name: add user "tomcat"
+  user: 
+    name: tomcat 
+	group: tomcat 
+	home: /usr/share/tomcat 
+	createhome: no
+  become: True
+  become_method: sudo
+```
+
+===== Quelques exemples de module intéressant
+
+* copy : copie un fichier/dossier présent dans le dossier `files/` vers un emplacement sur le remote
+* template : applique des variables à un fichier présent dans le dossier `templates/` puis le copie vers le remote
+* yum : utilise yum pour installer un logiciel
+* unarchive : décompresse une archive sur le remote
+
+==== Variable
+
+Vous pouvez créer des templates contenant des variable qui seront remplacées lors de l'exécution du déploiement
+
+par exemple un fichier application.conf.j2
+
+```
+app {
+  host = {{ app_application_host }}
+  port = {{ app_application_port }}
+}
+```
+
+Ce fichier, déployé à l'aide du module template, remplacera les variable par les valeurs
+
+exemple de `vars/main.yml`
+
+```yaml
+app_application_host: 127.0.0.1
+app_application_port: 1234
+```
+
+Il y a deux endroits où vous pouvez mettre les variables, dans `vars/` ou dans `defaults/`
+
+* `defaults/` : facilement overridable, les valeurs de conf général/d'exemple
+* `vars/` : les valeurs de votre role
+
+pour plus de détails : https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
+
+==== Handlers
+
+Des fois, on doit redémarrer un service après l'avoir configuré. Pour cela, on utilise un handlers/
+
+Par exemple la tâche suivante dans le fichier `tasks/main.yml`
+
+```yaml
+- name: Setup sudoers configuration
+  template: 
+    src: sudoers 
+	dest: /etc/sudoers
+  notify: Restart sudo	
+```
+
+va notifier la tâche Handler dans le fichier `handlers/main.yml`
+
+```yaml
+- name: Restart sudo
+  service: 
+    name: sudo 
+	state: restarted
+  become: yes
+  become_method: su
+```
+
+Un handler est une tâche comme une autre, sauf qu'elle n'est joué que lorsqu'elle est notifié, et elle n'est pas joué tant que toutes les tâches classiques du role n'ont pas été jouée
 
 == Bonnes Pratiques
 
+=== Utiliser la syntaxe YAML
 
+Plutôt 
+
+```yaml
+- name: Setup sudoers configuration
+  template: 
+    src: sudoers 
+	dest: /etc/sudoers 
+	owner: root 
+	group: root 
+	mode: "{{ sudoers_file_permission }}"
+```
+
+Que
+
+```yaml
+- name: Setup sudoers configuration
+  template: src=sudoers dest=/etc/sudoers owner=root group=root mode={{ sudoers_file_permission }} 
+```

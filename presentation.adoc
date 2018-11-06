@@ -245,6 +245,24 @@ Que
 
 === Nommer ses tâches
 
+Plutôt
+
+```yaml
+- name: Create application configuration
+  template:
+    src: application.conf.j2
+	dest: /application/root/directory/application.conf
+```
+
+Que
+
+```yaml
+- template:
+    src: application.conf.j2
+	dest: /application/root/directory/application.conf
+```
+
+
 === Eviter les tâche d'execution de script
 
 Eviter ce genre de tâches :

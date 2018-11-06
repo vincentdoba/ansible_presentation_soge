@@ -148,7 +148,7 @@ Exemple d'une tâche :
 * yum : utilise yum pour installer un logiciel
 * unarchive : décompresse une archive sur le remote
 
-==== Variable
+==== Variables
 
 Vous pouvez créer des templates contenant des variable qui seront remplacées lors de l'exécution du déploiement
 
@@ -172,8 +172,8 @@ app_application_port: 1234
 
 Il y a deux endroits où vous pouvez mettre les variables, dans `vars/` ou dans `defaults/`
 
-* `defaults/` : facilement overridable, les valeurs de conf général/d'exemple
-* `vars/` : les valeurs de votre role
+* `defaults/` : facilement overridable, les variables de conf général/d'exemple
+* `vars/` : les variables de votre role
 
 pour plus de détails : https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
 
@@ -229,4 +229,35 @@ Que
 
 === Nommer ses tâches
 
+=== Eviter les tâche d'execution de script
 
+Eviter ce genre de tâches :
+
+```yaml
+- name: Deploy application
+  shell: deploy.sh
+```
+
+Ce n'est pas la philosophie de l'outil. Si vous avez une commande à jouer lors du déploiement, posez vous la question de comment la transformer en une suite de tâches
+
+=== Préfixer ses variables avec le nom du role
+
+Plutôt
+
+```yaml
+role_application_database: ma_database
+```
+
+que 
+
+```yaml
+application_database: ma_database
+```
+
+=== Utiliser la snake_case plutôt que CamelCase
+
+Plutôt `nom_de_ma_variable` que `nomDeMaVariable`
+
+=== Coupler les rôles
+
+Un role doit se suffire à lui-même

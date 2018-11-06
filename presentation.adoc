@@ -134,9 +134,9 @@ Exemple d'une tâche :
 - name: add user "tomcat"
   user: 
     name: tomcat 
-	group: tomcat 
-	home: /usr/share/tomcat 
-	createhome: no
+    group: tomcat 
+    home: /usr/share/tomcat 
+    createhome: no
   become: True
   become_method: sudo
 ```
@@ -187,7 +187,7 @@ Par exemple la tâche suivante dans le fichier `tasks/main.yml`
 - name: Setup sudoers configuration
   template: 
     src: sudoers 
-	dest: /etc/sudoers
+    dest: /etc/sudoers
   notify: Restart sudo	
 ```
 
@@ -197,7 +197,7 @@ va notifier la tâche Handler dans le fichier `handlers/main.yml`
 - name: Restart sudo
   service: 
     name: sudo 
-	state: restarted
+    state: restarted
   become: yes
   become_method: su
 ```
@@ -214,10 +214,10 @@ Plutôt
 - name: Setup sudoers configuration
   template: 
     src: sudoers 
-	dest: /etc/sudoers 
-	owner: root 
-	group: root 
-	mode: "{{ sudoers_file_permission }}"
+    dest: /etc/sudoers 
+    owner: root 
+    group: root 
+    mode: "{{ sudoers_file_permission }}"
 ```
 
 Que
@@ -226,3 +226,7 @@ Que
 - name: Setup sudoers configuration
   template: src=sudoers dest=/etc/sudoers owner=root group=root mode={{ sudoers_file_permission }} 
 ```
+
+=== Nommer ses tâches
+
+

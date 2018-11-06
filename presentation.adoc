@@ -251,7 +251,7 @@ Plutôt
 - name: Create application configuration
   template:
     src: application.conf.j2
-	dest: /application/root/directory/application.conf
+    dest: /application/root/directory/application.conf
 ```
 
 Que
@@ -259,7 +259,7 @@ Que
 ```yaml
 - template:
     src: application.conf.j2
-	dest: /application/root/directory/application.conf
+    dest: /application/root/directory/application.conf
 ```
 
 

@@ -56,9 +56,51 @@ deploy.yml
         - users
 ```
 
+== La Syntaxe YAML
+
+Un fichier YAML commence par `---`
+
+=== Dictionnaires
+
+```yaml
+martin:
+    name: Martin D'vloper
+    job: Developer
+    skill: Elite
+	
+martin: {name: Martin D'vloper, job: Developer, skill: Elite}
+```
+
+=== Liste
+
+```yaml
+fruits:
+    - Apple
+    - Orange
+    - Strawberry
+    - Mango
+	
+fruits: ['Apple', 'Orange', 'Strawberry', 'Mango']
+```
+
+=== Commentaires
+
+```yaml
+# un commentaire
+```
+
+=== Attention
+
+* si votre ligne commence par `{`, vous devez le mettre entre quotes
+* pareil si vous avez un caractère `:` ou `#` suivi d'un espace
+* attention aux conversions en booleen ou flottant automatique, si vous voulez utiliser `yes` ou `1.0` littéralement, le mettre entre quote
+* en général, si vous avez un doute, utilisez des quotes
+
+Pour plus de détails, https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+
 == Rôles
 
-== La Syntaxe YAML
+
 
 == Bonnes Pratiques
 

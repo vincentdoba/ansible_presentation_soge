@@ -177,6 +177,22 @@ Il y a deux endroits où vous pouvez mettre les variables, dans `vars/` ou dans 
 
 pour plus de détails : https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
 
+===== Ansible Vault
+
+Pour stocker les variables de manière sécurisée, il existe ansible-vault
+
+Pour créer un fichier avec ansible-vault (vous devez créer un mot de passe)
+
+```
+ansible-vault create vars/main.yml
+```
+
+Pour éditer le fichier (on vous demandera le mot de passe)
+
+```
+ansible-vault edit vars/main.yml
+```
+
 ==== Handlers
 
 Des fois, on doit redémarrer un service après l'avoir configuré. Pour cela, on utilise un handlers/
@@ -261,3 +277,17 @@ Plutôt `nom_de_ma_variable` que `nomDeMaVariable`
 === Coupler les rôles
 
 Un role doit se suffire à lui-même
+
+== Tester Ansible
+
+=== Syntax Check
+
+```
+ansible-playbook deploy.yml --syntax-check
+```
+
+=== Tests plus complet
+
+* https://molecule.readthedocs.io/en/latest/
+
+Ansible Check Mode
